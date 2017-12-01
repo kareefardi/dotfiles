@@ -14,10 +14,9 @@ Plugin 'VundleVim/Vundle.vim'
 Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
 
-" theme
+" themes
 Plugin 'morhetz/gruvbox' 
-
-" solarized theme
+Plugin 'chriskempson/base16-vim'
 Plugin 'altercation/vim-colors-solarized' 
 
 " linter
@@ -47,25 +46,16 @@ filetype plugin indent on    " required
 " see :h vundle for more details or wiki for FAQ
 " Put your non-Plugin stuff after this line
 
-" set airline theme
-" let g:airline_solarized_bg='light'
+" airline settings
+let g:airline_powerline_fonts = 1			" better airline rendering
+let g:airline#extensions#ale#enabled = 1		" airline lint
+let g:airline#extensions#tabline#enabled = 1		" airline buffer view
+let g:airline#extensions#whitespace#enabled = 1		" airline whitespace shit
 
-" better airline rendering
-let g:airline_powerline_fonts = 1
+" setthing theme
+set background=dark
+colorscheme base16-3024
 
-" airline lint
-let g:airline#extensions#ale#enabled = 1
-
-" airline buffer view
-let g:airline#extensions#tabline#enabled = 1
-
-" airline whitespace shit
-let g:airline#extensions#whitespace#enabled = 1
-" set theme
-" colorscheme gruvbox
-" set background=dark
-set background=light
-colorscheme solarized
 " hide gvim BS
 :set guioptions-=m  "remove menu bar
 :set guioptions-=T  "remove toolbar
