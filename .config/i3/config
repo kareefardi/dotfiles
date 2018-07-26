@@ -30,14 +30,17 @@ font pango:monospace 8
 floating_modifier $mod
 
 # start a terminal
+# bindsym $mod+Return exec gnome-terminal --window-with-profile="BlackIsGold"
 bindsym $mod+Return exec gnome-terminal --window-with-profile="BlackIsGold"
-bindsym $mod+Shift+Return exec gnome-terminal --window-with-profile="HappyDark"
+bindsym $mod+Shift+Return exec gnome-terminal --window-with-profile="Sadlight"
 
 # kill focused window
 bindsym $mod+Shift+q kill
 
 # start rofi (a program launcher)
-bindsym $mod+d exec rofi -show run
+bindsym $mod+d exec rofi -show drun -theme sidebar -async-per-read 25 -threads 0
+bindsym $mod+Shift+d exec rofi -show window -theme sidebar -async-per-read 25 -threads 0
+# bindsym $mod+d exec rofi -show drun 
 # There also is the (new) i3-dmenu-desktop which only displays applications
 # shipping a .desktop file. It is a wrapper around dmenu, so you need that
 # installed.
@@ -56,8 +59,8 @@ bindsym $mod+Up focus up
 bindsym $mod+Right focus right
 
 # or lazy left switch
-bindsym $mod+x focus left
-bindsym $mod+Shift+x focus right
+bindsym $mod+grave focus right
+bindsym $mod+Shift+grave focus left
 
 # move focused window
 bindsym $mod+Shift+h move left
@@ -98,18 +101,24 @@ bindsym $mod+a focus parent
 #bindsym $mod+d focus child
 
 # workspace names
-set $ws1 "1: Terminal "
-set $ws2 "2: Firefox "
-set $ws3 "3: Doc "
-set $ws4 "4: File  "
-set $ws5 "5: Chrome "
+# set $terminal "1: Terminal "
+# set $firefox "2: Firefox "
+# set $docs "3: Doc "
+# set $files "4: File  "
+# set $chromium "5: Chrome "
 
+set $terminal "1 "
+set $terminal2 "2 "
+set $firefox "3 "
+set $docs "4 "
+set $files "5 "
+set $chromium "6 "
 # switch to workspace
-bindsym $mod+1 workspace $ws1
-bindsym $mod+2 workspace $ws2
-bindsym $mod+3 workspace $ws3
-bindsym $mod+4 workspace $ws4
-bindsym $mod+5 workspace $ws5
+bindsym $mod+1 workspace $terminal
+bindsym $mod+2 workspace $firefox
+bindsym $mod+3 workspace $docs
+bindsym $mod+4 workspace $files
+bindsym $mod+5 workspace $chromium
 bindsym $mod+6 workspace 6
 bindsym $mod+7 workspace 7
 bindsym $mod+8 workspace 8
@@ -117,18 +126,19 @@ bindsym $mod+9 workspace 9
 bindsym $mod+0 workspace 10
 
 #bind apps to workspace
-assign [class="Chromium"] $ws5
-assign [class="Firefox"] $ws2
-assign [class="Nightly"] $ws2
-assign [class="Nautilus"] $ws4
-assign [class="Nemo"] $ws4
+assign [class="Vivaldi-snapshot"] $chromium
+assign [class="Chromium"] $chromium
+assign [class="Firefox"] $firefox
+assign [class="Nightly"] $firefox
+assign [class="Nautilus"] $files
+assign [class="Nemo"] $files
 
 # move focused container to workspace
-bindsym $mod+Shift+1 move container to workspace $ws1
-bindsym $mod+Shift+2 move container to workspace $ws2
-bindsym $mod+Shift+3 move container to workspace $ws3
-bindsym $mod+Shift+4 move container to workspace $ws4
-bindsym $mod+Shift+5 move container to workspace $ws5
+bindsym $mod+Shift+1 move container to workspace $terminal
+bindsym $mod+Shift+2 move container to workspace $firefox
+bindsym $mod+Shift+3 move container to workspace $docs
+bindsym $mod+Shift+4 move container to workspace $files
+bindsym $mod+Shift+5 move container to workspace $chromium
 bindsym $mod+Shift+6 move container to workspace 6
 bindsym $mod+Shift+7 move container to workspace 7
 bindsym $mod+Shift+8 move container to workspace 8
@@ -170,31 +180,32 @@ bindsym $mod+r mode "resize"
 
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
-bar {
-        status_command i3status-rs ~/.config/i3/status.toml
-	colors {
-		separator #666666
-		background #000000
-		# background #383C4A
-		statusline #dddddd
-		# focused_workspace #0088CC #0088CC #ffffff
-		focused_workspace #333333 #333333 #ffffff
-		active_workspace #111111 #111111 #ffffff
-		inactive_workspace #111111 #111111 #888888
-		urgent_workspace #2f343a #900000 #ffffff
-      }
-}
+ bar {
+         status_command i3status-rs ~/.config/i3/status.toml
+ 	colors {
+ 		separator #666666
+ 		background #00000000
+ 		# background #383C4A
+ 		statusline #dddddd
+ 		# focused_workspace #0088CC #0088CC #ffffff
+ 		focused_workspace #333333 #333333 #ffffff
+ 		active_workspace #111111 #111111 #ffffff
+ 		inactive_workspace #111111 #111111 #888888
+ 		urgent_workspace #2f343a #900000 #ffffff
+       }
+ }
+
 
 # window colors
 
 # Pulse Audio controls
-bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume 1 +5% #increase sound volume
-bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume 1 -5% #decrease sound volume
-bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute 1 toggle # mute sound
+bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume 0 +5% #increase sound volume
+bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume 0 -5% #decrease sound volume
+bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute 0 toggle # mute sound
 
 # Sreen brightness controls
-bindsym XF86MonBrightnessUp exec light -A 5 # increase screen brightness
-bindsym XF86MonBrightnessDown exec light -U 5 # decrease screen brightness
+bindsym XF86MonBrightnessUp exec light -A 2.5 # increase screen brightness
+bindsym XF86MonBrightnessDown exec light -U 2.5 # decrease screen brightness
 
 # Media player controls
 bindsym XF86AudioPlay exec playerctl play
@@ -209,7 +220,10 @@ bindsym $mod+Shift+o exec i3lock
 exec twmnd 	# notification bar
 exec compton 	# window compositor
 exec nm-applet	# wifi indicator
-exec_always feh --bg-fill $HOME/Pictures/wall2.jpg
+exec_always feh --bg-fill $HOME/Pictures/wall.jpg # wallpaper
+exec_always --no-startup-id ibus-daemon # keyboard layout
+exec_always --no-startup-id /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
+exec_always --no-startup-id redshift -O 5000
 
 # quick workspace switch
 workspace_auto_back_and_forth yes
@@ -229,8 +243,10 @@ for_window [class="^.*"] border pixel 0
 smart_gaps on
 
 # client color
-client.focused          #4d004d #4d004d #ffffff #2e9ef4   #285577
-client.focused_inactive #5f676a #5f676a #ffffff #484e50   #5f676a
+#client.focused          #4d004d #4d004d #ffffff #2e9ef4   #285577
+client.focused          #282828 #282828 #ffffff #2e9ef4   #285577
+client.focused_inactive #928374 #928374 #ffffff #484e50   #5f676a
 
 # polkit
-exec --no-startup-id /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
+
+

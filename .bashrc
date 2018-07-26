@@ -34,3 +34,5 @@ alias auc="cd $auc && echo \"auc folder\""
 
 alias grub-update="sudo grub-mkconfig -o /boot/grub/grub.cfg"
 alias bright="sudo tee /sys/class/backlight/intel_backlight/brightness <<< "
+
+alias steam="steam > ~/.steam_log.txt & echo \"running steam in background (log in home steam_log)\""

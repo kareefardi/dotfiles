@@ -10,26 +10,21 @@ call vundle#begin()
 " let Vundle manage Vundle, required
 Plugin 'VundleVim/Vundle.vim'
 
-" airline
-Plugin 'vim-airline/vim-airline'
-Plugin 'vim-airline/vim-airline-themes'
+Plugin 'vim-airline/vim-airline' 		" the cool bar at the bottom
+Plugin 'vim-airline/vim-airline-themes'		" a theme for the the cool bar at the bottom
+" Plugin 'vim-syntastic/syntastic' 		" synchronous autocomplete
+Plugin 'Valloric/YouCompleteMe'			" aysnchronous autocomplete
+Plugin 'scrooloose/nerdtree'			" project tree
+Plugin 'w0rp/ale'				" linter
+Plugin 'godlygeek/csapprox' 			" terminal color (make gui and terminal color the same)
+Plugin 'universal-ctags/ctags' 			" Ctags for code navigation jump to definiton etc
+Plugin 'junegunn/fzf.vim'				" fuzzy finder for project search
 
-" theme
+Plugin 'wlangstroth/vim-racket'			" racket shit
+" themes
 Plugin 'morhetz/gruvbox' 
 Plugin 'altercation/vim-colors-solarized' 
 Plugin 'chriskempson/base16-vim'
-
-" linter
-"Plugin 'vim-syntastic/syntastic'
-
-" ycm
-Plugin 'Valloric/YouCompleteMe'
-
-" nerdtree
-Plugin 'scrooloose/nerdtree'
-
-" linter 2
-Plugin 'w0rp/ale'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -46,26 +41,23 @@ filetype plugin indent on    " required
 " see :h vundle for more details or wiki for FAQ
 " Put your non-Plugin stuff after this line
 
-" set airline theme
+" airline settings
 " let g:airline_solarized_bg='light'
+let g:airline_powerline_fonts = 1 			" better airline rendering
+let g:airline#extensions#ale#enabled = 1 		" airline lint
+let g:airline#extensions#tabline#enabled = 1 		" airline buffer view
+let g:airline#extensions#whitespace#enabled = 1 	" airline whitespace shit
 
-" better airline rendering
-let g:airline_powerline_fonts = 1
+set t_Co=256				" terminal 256 colors
+" colorscheme base16-default-dark
+set background=dark
 
-" airline lint
-let g:airline#extensions#ale#enabled = 1
+syntax on				" syntax highlighting
+set number				" line numbers
+set clipboard=unnamedplus		" clipboard shit
+set foldmethod=syntax			" folding shit
+set foldnestmax=1			" folding shit
 
-" airline buffer view
-let g:airline#extensions#tabline#enabled = 1
-
-" airline whitespace shit
-let g:airline#extensions#whitespace#enabled = 1
-" set theme
-" colorscheme gruvbox
-" set background=dark
-"set background=light
-"colorscheme solarized
-colorscheme base16-default-dark
 " hide gvim BS
 :set guioptions-=m  "remove menu bar
 :set guioptions-=T  "remove toolbar
@@ -74,27 +66,16 @@ colorscheme base16-default-dark
 :set guioptions-=e  "remove bottombar
 :set guiheadroom=0
 
-" turn on syntax highlighting
-syntax on
-
-" decrease font size
-" set guifont=Monospace\ 10
-
-" line number
-set number
-
-" X clipboard
-set clipboard=unnamedplus
-
-" folding
-set foldmethod=syntax
-set foldnestmax=1
 
 " set ycm settings
 let g:ycm_add_preview_to_completeopt = 1
 let g:ycm_autoclose_preview_window_after_insertion = 1
 let g:ycm_add_preview_to_completeopt = 1
 let g:ycm_max_num_candidates = 11
+let g:ycm_show_diagnostics_ui = 0
+let g:ycm_enable_diagnostic_signs = 0
+let g:ycm_enable_diagnostic_highlighting = 0
+let g:ycm_echo_current_diagnostic = 0
 "let g:ycm_filetype_specific_completion_to_disable = {
 "\}
 " linter settings
@@ -109,11 +90,13 @@ let g:ycm_max_num_candidates = 11
 "let g:syntastic_cpp_checkers = ['clang_check']
 
 "ale settings
-let g:ale_lint_delay = 700
 let g:airline#extensions#ale#enabled = 1
 let g:ale_linters = {
 	\ 'python' : ['pylint', 'flake8'],
+	\ 'cpp' : ['gcc', 'clang'],
 	\}
+let g:ale_lint_on_text_changed = 'never'
+let g:ale_lint_on_insert_leave = 1
 
 " toggle theme function
 nnoremap <C-S-x> :call ToggleSolarized()<cr>
@@ -127,12 +110,26 @@ function ToggleSolarized()
 endfunction
 
 " remove auto enter comment
-:set formatoptions-=cro
 
-nnoremap <C-S-t> :NERDTreeFocus<cr><silent>
 
+" separate themes for gui and termianl
 if has('gui_running')
-	colorscheme base16-default-dark
+	" colorscheme base16-default-dark
+	colorscheme gruvbox
 else
-	colorscheme desert
+	colorscheme gruvbox
 endif
+
+
+autocmd Filetype html setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=2
+autocmd Filetype javascript setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=2
+autocmd Filetype cpp setlocal expandtab tabstop=4 shiftwidth=4 softtabstop=4 smartindent
+
+" nerdtree settings
+let g:NERDTreeWinPos='right'
+map <C-n> :NERDTreeToggle<CR>
+map <C-S-N> :NERDTreeFocus<cr>
+
+set smartindent
+"set formatoptions-=cro
+
