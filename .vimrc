@@ -25,6 +25,7 @@ Plugin 'wlangstroth/vim-racket'			" racket shit
 Plugin 'morhetz/gruvbox' 
 Plugin 'altercation/vim-colors-solarized' 
 Plugin 'chriskempson/base16-vim'
+Plugin 'octol/vim-cpp-enhanced-highlight'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -47,6 +48,7 @@ let g:airline_powerline_fonts = 1 			" better airline rendering
 let g:airline#extensions#ale#enabled = 1 		" airline lint
 let g:airline#extensions#tabline#enabled = 1 		" airline buffer view
 let g:airline#extensions#whitespace#enabled = 1 	" airline whitespace shit
+let g:ale_set_highlights = 1				" error highlight
 
 set t_Co=256				" terminal 256 colors
 " colorscheme base16-default-dark
@@ -124,6 +126,7 @@ endif
 autocmd Filetype html setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=2
 autocmd Filetype javascript setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=2
 autocmd Filetype cpp setlocal expandtab tabstop=4 shiftwidth=4 softtabstop=4 smartindent
+autocmd Filetype sql setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=2 smartindent autoindent
 
 " nerdtree settings
 let g:NERDTreeWinPos='right'
