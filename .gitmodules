@@ -1,4 +1,4 @@
 [submodule ".zsh/.oh-my-zsh"]
 	path = .zsh/.oh-my-zsh
-	url = https://github.com/kareefardi/oh-my-zsh
-	master = master
+	url = https://github.com/kareefardi/oh-my-zsh/tree/master
+	branch = master
