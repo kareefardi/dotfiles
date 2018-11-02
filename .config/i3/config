@@ -107,12 +107,12 @@ bindsym $mod+a focus parent
 # set $files "4: File  "
 # set $chromium "5: Chrome "
 
-set $terminal "1 "
-set $terminal2 "2 "
-set $firefox "3 "
-set $docs "4 "
-set $files "5 "
-set $chromium "6 "
+set $terminal "1"
+set $terminal2 "2"
+set $firefox "3"
+set $docs "4"
+set $files "5"
+set $chromium "6"
 # switch to workspace
 bindsym $mod+1 workspace $terminal
 bindsym $mod+2 workspace $firefox
@@ -180,20 +180,20 @@ bindsym $mod+r mode "resize"
 
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
- bar {
-         status_command i3status-rs ~/.config/i3/status.toml
- 	colors {
- 		separator #666666
- 		background #00000000
- 		# background #383C4A
- 		statusline #dddddd
- 		# focused_workspace #0088CC #0088CC #ffffff
- 		focused_workspace #333333 #333333 #ffffff
- 		active_workspace #111111 #111111 #ffffff
- 		inactive_workspace #111111 #111111 #888888
- 		urgent_workspace #2f343a #900000 #ffffff
-       }
- }
+# bar {
+#         status_command i3status-rs ~/.config/i3/status.toml
+# 	colors {
+# 		separator #666666
+# 		background #00000000
+# 		# background #383C4A
+# 		statusline #dddddd
+# 		# focused_workspace #0088CC #0088CC #ffffff
+# 		focused_workspace #333333 #333333 #ffffff
+# 		active_workspace #111111 #111111 #ffffff
+# 		inactive_workspace #111111 #111111 #888888
+# 		urgent_workspace #2f343a #900000 #ffffff
+#       }
+# }
 
 
 # window colors
@@ -217,13 +217,14 @@ bindsym XF86AudioPrev exec playerctl previous
 bindsym $mod+Shift+o exec i3lock
 
 # startups 
+exec_always --no-startup-id $HOME/.config/i3/polybar.sh
 exec twmnd 	# notification bar
-exec compton 	# window compositor
+# exec compton 	# window compositor
 exec nm-applet	# wifi indicator
 exec_always feh --bg-fill $HOME/Pictures/wall.jpg # wallpaper
 exec_always --no-startup-id ibus-daemon # keyboard layout
 exec_always --no-startup-id /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
-exec_always --no-startup-id redshift -O 5000
+# exec_always --no-startup-id redshift -O 5000
 
 # quick workspace switch
 workspace_auto_back_and_forth yes
