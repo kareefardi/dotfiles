@@ -126,7 +126,7 @@ bindsym $mod+9 workspace 9
 bindsym $mod+0 workspace 10
 
 #bind apps to workspace
-assign [class="Vivaldi-snapshot"] $chromium
+assign [class="Vivaldi"] $chromium
 assign [class="Chromium"] $chromium
 assign [class="Firefox"] $firefox
 assign [class="Nightly"] $firefox
@@ -204,8 +204,8 @@ bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume 0 -5% #d
 bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute 0 toggle # mute sound
 
 # Sreen brightness controls
-bindsym XF86MonBrightnessUp exec light -A 2.5 # increase screen brightness
-bindsym XF86MonBrightnessDown exec light -U 2.5 # decrease screen brightness
+#bindsym XF86MonBrightnessUp exec light -A 2.5 # increase screen brightness
+#bindsym XF86MonBrightnessDown exec light -U 2.5 # decrease screen brightness
 
 # Media player controls
 bindsym XF86AudioPlay exec playerctl play
@@ -218,10 +218,10 @@ bindsym $mod+Shift+o exec i3lock
 
 # startups 
 exec_always --no-startup-id $HOME/.config/i3/polybar.sh
-exec twmnd 	# notification bar
+#exec twmnd 	# notification bar
 # exec compton 	# window compositor
 exec nm-applet	# wifi indicator
-exec_always feh --bg-fill $HOME/Pictures/wall.jpg # wallpaper
+#exec_always feh --bg-fill $HOME/Pictures/wall.jpg # wallpaper
 exec_always --no-startup-id ibus-daemon # keyboard layout
 exec_always --no-startup-id /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
 # exec_always --no-startup-id redshift -O 5000
@@ -238,10 +238,10 @@ bindsym $mod+Shift+Tab workspace prev
 #exec_always --no-startup-id gnome-power-manager
 
 # gaps
-gaps inner 2
-gaps outer 1
-for_window [class="^.*"] border pixel 0
-smart_gaps on
+# gaps inner 2
+# gaps outer 1
+# for_window [class="^.*"] border pixel 0
+# smart_gaps on
 
 # client color
 #client.focused          #4d004d #4d004d #ffffff #2e9ef4   #285577
@@ -251,3 +251,25 @@ client.focused_inactive #928374 #928374 #ffffff #484e50   #5f676a
 # polkit
 
 
+#######
+#THEME#
+#######
+
+# set primary gruvbox colorscheme colors
+set $bg #282828
+set $red #cc241d
+set $green #98971a
+set $yellow #d79921
+set $blue #458588
+set $purple #b16286
+set $aqua #689d68
+set $gray #a89984
+set $darkgray #1d2021
+# blue gruvbox
+# class                 border|backgr|text|indicator|child_border
+client.focused          $blue $blue $darkgray $purple $darkgray
+client.focused_inactive $darkgray $darkgray $yellow $purple $darkgray
+client.unfocused        $darkgray $darkgray $yellow $purple $darkgray
+client.urgent           $red $red $white $red $red
+
+#end of window title bars & borders section

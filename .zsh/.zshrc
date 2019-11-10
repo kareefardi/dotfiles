@@ -66,6 +66,8 @@ plugins=(
   zsh-autosuggestions
   zsh-syntax-highlighting
   forgit
+  fzf
+  zsh-z 
 )
 
 source $ZSH/oh-my-zsh.sh
@@ -101,6 +103,8 @@ source $ZSH/oh-my-zsh.sh
 
 
 # autosuggest bindings
-bindkey '\t ' autosuggest-accept
+bindkey '^ ' autosuggest-accept
 # stop sharing history
 unsetopt share_history
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh

@@ -19,6 +19,7 @@ Plugin 'w0rp/ale'				" linter
 Plugin 'godlygeek/csapprox' 			" terminal color (make gui and terminal color the same)
 Plugin 'universal-ctags/ctags' 			" Ctags for code navigation jump to definiton etc
 Plugin 'junegunn/fzf.vim'				" fuzzy finder for project search
+Plugin 'zackhsi/fzf-tags'
 
 Plugin 'wlangstroth/vim-racket'			" racket shit
 " themes
@@ -44,7 +45,7 @@ filetype plugin indent on    " required
 
 " airline settings
 " let g:airline_solarized_bg='light'
-let g:airline_powerline_fonts = 1 			" better airline rendering
+" let g:airline_powerline_fonts = 1 			" better airline rendering
 let g:airline#extensions#ale#enabled = 1 		" airline lint
 let g:airline#extensions#tabline#enabled = 1 		" airline buffer view
 let g:airline#extensions#whitespace#enabled = 1 	" airline whitespace shit
@@ -136,3 +137,17 @@ map <C-S-N> :NERDTreeFocus<cr>
 set smartindent
 "set formatoptions-=cro
 
+set rtp+=~/.fzf		"enable fzf
+
+nnoremap <C-J> <C-W><C-J>
+nnoremap <C-K> <C-W><C-K>
+nnoremap <C-L> <C-W><C-L>
+nnoremap <C-H> <C-W><C-H>
+map <A-f> :FZF<CR>
+map <A-b> :Buffers<CR>
+
+:set hlsearch
+:set ignorecase
+:set smartcase
+
+nmap <C-]> <Plug>(fzf_tags)
