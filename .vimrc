@@ -13,10 +13,11 @@ Plugin 'VundleVim/Vundle.vim'
 Plugin 'vim-airline/vim-airline' 		" the cool bar at the bottom
 Plugin 'vim-airline/vim-airline-themes'		" a theme for the the cool bar at the bottom
 " Plugin 'vim-syntastic/syntastic' 		" synchronous autocomplete
-Plugin 'Valloric/YouCompleteMe'			" aysnchronous autocomplete
+" Plugin 'Valloric/YouCompleteMe'			" aysnchronous autocomplete
+Plugin 'codota/tabnine-vim'
 Plugin 'scrooloose/nerdtree'			" project tree
 Plugin 'w0rp/ale'				" linter
-Plugin 'godlygeek/csapprox' 			" terminal color (make gui and terminal color the same)
+" Plugin 'godlygeek/csapprox' 			" terminal color (make gui and terminal color the same)
 Plugin 'universal-ctags/ctags' 			" Ctags for code navigation jump to definiton etc
 Plugin 'junegunn/fzf.vim'				" fuzzy finder for project search
 Plugin 'zackhsi/fzf-tags'
@@ -27,6 +28,7 @@ Plugin 'morhetz/gruvbox'
 Plugin 'altercation/vim-colors-solarized' 
 Plugin 'chriskempson/base16-vim'
 Plugin 'octol/vim-cpp-enhanced-highlight'
+Plugin 'junegunn/vim-easy-align'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -56,7 +58,7 @@ set t_Co=256				" terminal 256 colors
 set background=dark
 
 syntax on				" syntax highlighting
-set number				" line numbers
+"set number				" line numbers
 set clipboard=unnamedplus		" clipboard shit
 set foldmethod=syntax			" folding shit
 set foldnestmax=1			" folding shit
@@ -97,9 +99,15 @@ let g:airline#extensions#ale#enabled = 1
 let g:ale_linters = {
 	\ 'python' : ['pylint', 'flake8'],
 	\ 'cpp' : ['gcc', 'clang'],
+	\ 'tcl' : ['nagelfar'],
 	\}
 let g:ale_lint_on_text_changed = 'never'
-let g:ale_lint_on_insert_leave = 1
+" Write this in your vimrc file
+let g:ale_lint_on_text_changed = 'never'
+let g:ale_lint_on_insert_leave = 0
+" You can disable this option too
+" if you don't want linters to run on opening a file
+let g:ale_lint_on_enter = 0
 
 " toggle theme function
 nnoremap <C-S-x> :call ToggleSolarized()<cr>
@@ -151,3 +159,30 @@ map <A-b> :Buffers<CR>
 :set smartcase
 
 nmap <C-]> <Plug>(fzf_tags)
+" Start interactive EasyAlign in visual mode (e.g. vipga)
+xmap ga <Plug>(EasyAlign)
+
+" Start interactive EasyAlign for a motion/text object (e.g. gaip)
+nmap ga <Plug>(EasyAlign)
+
+
+" turn hybrid line numbers on
+set number relativenumber
+set nu rnu
+
+" turn hybrid line numbers off
+set nonumber norelativenumber
+set nonu nornu
+
+" toggle hybrid line numbers
+set number! relativenumber!
+set nu! rnu!
+set number relativenumber
+
+augroup numbertoggle
+  autocmd!
+  autocmd BufEnter,FocusGained,InsertLeave * set relativenumber
+  autocmd BufLeave,FocusLost,InsertEnter   * set norelativenumber
+augroup END
+
+set guifont=FiraCode\ Nerd\ Font\ weight=450\ 12

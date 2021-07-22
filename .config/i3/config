@@ -31,15 +31,15 @@ floating_modifier $mod
 
 # start a terminal
 # bindsym $mod+Return exec gnome-terminal --window-with-profile="BlackIsGold"
-bindsym $mod+Return exec gnome-terminal --window-with-profile="BlackIsGold"
-bindsym $mod+Shift+Return exec gnome-terminal --window-with-profile="Sadlight"
+bindsym $mod+Return exec gnome-terminal --window-with-profile="Gruvbox Dark"
+bindsym $mod+Shift+Return exec gnome-terminal --window-with-profile="Gruvbox"
 
 # kill focused window
 bindsym $mod+Shift+q kill
 
 # start rofi (a program launcher)
-bindsym $mod+d exec rofi -show drun -theme sidebar -async-per-read 25 -threads 0
-bindsym $mod+Shift+d exec rofi -show window -theme sidebar -async-per-read 25 -threads 0
+bindsym $mod+d exec "rofi -modi run,drun -show drun -columns 1 -width 24 -lines 9 -padding 45 -hide-scrollbar -show-icons -drun-icon-theme Papirus"
+bindsym $mod+Shift+d exec rofi -show window -columns 1 -width 24 -lines 9 -padding 45 -hide-scrollbar -show-icons -drun-icon-theme "Papirus"
 # bindsym $mod+d exec rofi -show drun 
 # There also is the (new) i3-dmenu-desktop which only displays applications
 # shipping a .desktop file. It is a wrapper around dmenu, so you need that
@@ -102,21 +102,20 @@ bindsym $mod+a focus parent
 
 # workspace names
 # set $terminal "1: Terminal "
-# set $firefox "2: Firefox "
+# set $firefox "2: Firefox"
 # set $docs "3: Doc "
-# set $files "4: File  "
+# set $files "4: File "
 # set $chromium "5: Chrome "
 
-set $terminal "1"
-set $terminal2 "2"
-set $firefox "3"
-set $docs "4"
-set $files "5"
+set $terminal "1: "
+set $firefox "2: "
+set $programs "3: "
+set $files "4: "
 set $chromium "6"
 # switch to workspace
 bindsym $mod+1 workspace $terminal
 bindsym $mod+2 workspace $firefox
-bindsym $mod+3 workspace $docs
+bindsym $mod+3 workspace $programs
 bindsym $mod+4 workspace $files
 bindsym $mod+5 workspace $chromium
 bindsym $mod+6 workspace 6
@@ -126,17 +125,19 @@ bindsym $mod+9 workspace 9
 bindsym $mod+0 workspace 10
 
 #bind apps to workspace
-assign [class="Vivaldi"] $chromium
-assign [class="Chromium"] $chromium
-assign [class="Firefox"] $firefox
+assign [class="(?i).*Vivaldi.*"] $chromium
+assign [class="(?i).*Chromium.*"] $chromium
+assign [class="(?i).*Firefox.*"] $firefox
 assign [class="Nightly"] $firefox
 assign [class="Nautilus"] $files
-assign [class="Nemo"] $files
+assign [class="(?i).*slack.*"] $programs
+assign [class="(?i).*zoom.*"] $programs
+assign [class="(?i).*Nemo.*"] $files
 
 # move focused container to workspace
 bindsym $mod+Shift+1 move container to workspace $terminal
 bindsym $mod+Shift+2 move container to workspace $firefox
-bindsym $mod+Shift+3 move container to workspace $docs
+bindsym $mod+Shift+3 move container to workspace $programs
 bindsym $mod+Shift+4 move container to workspace $files
 bindsym $mod+Shift+5 move container to workspace $chromium
 bindsym $mod+Shift+6 move container to workspace 6
@@ -150,6 +151,15 @@ bindsym $mod+Shift+c reload
 # restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
 bindsym $mod+Shift+r restart
 # exit i3 (logs you out of your X session)
+mode "exit: [l]ogout, [r]eboot, [s]hutdown" {
+  bindsym l exec i3-msg exit
+  bindsym r exec systemctl reboot
+  bindsym s exec systemctl shutdown
+  bindsym Escape mode "default"
+  bindsym Return mode "default"
+}
+
+#bindsym $mod+Shift+e mode "exit: [l]ogout, [r]eboot, [s]hutdown"
 bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
 
 # resize window (you can also use the mouse for that)
@@ -204,8 +214,8 @@ bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume 0 -5% #d
 bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute 0 toggle # mute sound
 
 # Sreen brightness controls
-#bindsym XF86MonBrightnessUp exec light -A 2.5 # increase screen brightness
-#bindsym XF86MonBrightnessDown exec light -U 2.5 # decrease screen brightness
+bindsym XF86MonBrightnessUp exec xbacklight -inc 5 # increase screen brightness
+bindsym XF86MonBrightnessDown exec xbacklight -dec 5 # decrease screen brightness
 
 # Media player controls
 bindsym XF86AudioPlay exec playerctl play
@@ -216,15 +226,18 @@ bindsym XF86AudioPrev exec playerctl previous
 # i3lock
 bindsym $mod+Shift+o exec i3lock
 
+set $wallpaper $HOME/Pictures/gruvbox.png
 # startups 
-exec_always --no-startup-id $HOME/.config/i3/polybar.sh
-#exec twmnd 	# notification bar
-# exec compton 	# window compositor
-exec nm-applet	# wifi indicator
-#exec_always feh --bg-fill $HOME/Pictures/wall.jpg # wallpaper
+exec --no-startup-id pulseaudio --start
+exec_always --no-startup-id $HOME/.config/polybar/launch.sh
+exec_always --no-startup-id dunst
+exec_always --no-startup-id $HOME/.local/bin/autotiling.py
+exec_always --no-startup-id xrandr --dpi 102 
+exec_always --no-startup-id picom --config $HOME/.config/picom.conf
+exec_always --no-startup-id nm-applet --sm-disable # wifi indicator
+exec_always feh --bg-fill $wallpaper
 exec_always --no-startup-id ibus-daemon # keyboard layout
-exec_always --no-startup-id /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
-# exec_always --no-startup-id redshift -O 5000
+exec --no-startup-id pasystray
 
 # quick workspace switch
 workspace_auto_back_and_forth yes
@@ -240,36 +253,59 @@ bindsym $mod+Shift+Tab workspace prev
 # gaps
 # gaps inner 2
 # gaps outer 1
-# for_window [class="^.*"] border pixel 0
+for_window [class=".*"] border pixel 0
+gaps inner 10
+gaps outer 1
+#gaps horizontal 10
+# gaps outer current toggle 60
+smart_gaps on
+smart_borders on
 # smart_gaps on
 
 # client color
 #client.focused          #4d004d #4d004d #ffffff #2e9ef4   #285577
-client.focused          #282828 #282828 #ffffff #2e9ef4   #285577
-client.focused_inactive #928374 #928374 #ffffff #484e50   #5f676a
+# client.focused          #282828 #282828 #ffffff #2e9ef4   #285577
+# client.focused_inactive #928374 #928374 #ffffff #484e50   #5f676a
 
+# gruvbox colors
+# client.focused          #b8bb26 #282828 #fbf1c7 #b8bb26   #282828 
+# client.focused_inactive #b8bb26 #282828 #ffffff #98971a   #282828
+# client.unfocused        #282828 #282828 #a89984 #79740e   #282828
+# client.urgent           #cc241d #cc241d #fbf1c7 #cc241d   #cc241d
+# client.placeholder      #000000 #0c0c0c #ffffff #000000   #0c0c0c
+# 
+# client.background       #000000
 # polkit
 
+# my colors 
+# class                 border  bground text    indicator child_border
+client.focused          #BDAE93 #BDAE93 #3C3836 #BDAE93   #BDAE93
+client.focused_inactive #282828 #282828 #888888 #282828   #282828
+client.unfocused        #333333 #222222 #888888 #292D2E   #222222
+client.urgent           #2F343A #900000 #FFFFFF #900000   #900000
+client.placeholder      #000000 #0C0C0C #FFFFFF #000000   #0C0C0C
+
+client.background       #FFFFFF
 
 #######
 #THEME#
 #######
 
 # set primary gruvbox colorscheme colors
-set $bg #282828
-set $red #cc241d
-set $green #98971a
-set $yellow #d79921
-set $blue #458588
-set $purple #b16286
-set $aqua #689d68
-set $gray #a89984
-set $darkgray #1d2021
-# blue gruvbox
-# class                 border|backgr|text|indicator|child_border
-client.focused          $blue $blue $darkgray $purple $darkgray
-client.focused_inactive $darkgray $darkgray $yellow $purple $darkgray
-client.unfocused        $darkgray $darkgray $yellow $purple $darkgray
-client.urgent           $red $red $white $red $red
+#set $bg #282828
+# set $red #cc241d
+# set $green #98971a
+# set $yellow #d79921
+# set $blue #458588
+# set $purple #b16286
+# set $aqua #689d68
+# set $gray #a89984
+# set $darkgray #1d2021
+# # blue gruvbox
+# # class                 border|backgr|text|indicator|child_border
+# client.focused          $blue $blue $darkgray $purple $darkgray
+# client.focused_inactive $darkgray $darkgray $yellow $purple $darkgray
+# client.unfocused        $darkgray $darkgray $yellow $purple $darkgray
+# client.urgent           $red $red $white $red $red
 
 #end of window title bars & borders section
