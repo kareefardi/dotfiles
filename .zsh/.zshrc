@@ -69,13 +69,17 @@ ZSH_THEME="powerlevel10k/powerlevel10k"
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
-	git
-	zsh-autosuggestions
-	zsh-syntax-highlighting
+	auto-color-ls
+	bgnotify
 	forgit
 	fzf
-	zsh-z 
-	bgnotify
+	fzf-tab
+	zsh-autosuggestions
+	#zsh-autocomplete
+	zsh-syntax-highlighting
+	zsh-z
+	zsh-expand
+	zsh-vi-mode
 )
 
 source $ZSH/oh-my-zsh.sh
@@ -108,24 +112,40 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
-alias vim="vimx"
+
 alias lc='colorls'
 bgnotify_threshold=3
 
 # autosuggest bindings
-bindkey '^ ' autosuggest-accept
-# stop sharing history
 unsetopt share_history
 
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 PATH=$PATH:/home/karim/work/qflow/src
 PATH=$PATH:/home/karim/work/OpenDP/build
-
-PATH="/home/karim/perl5/bin${PATH:+:${PATH}}"; export PATH;
-PERL5LIB="/home/karim/perl5/lib/perl5${PERL5LIB:+:${PERL5LIB}}"; export PERL5LIB;
-PERL_LOCAL_LIB_ROOT="/home/karim/perl5${PERL_LOCAL_LIB_ROOT:+:${PERL_LOCAL_LIB_ROOT}}"; export PERL_LOCAL_LIB_ROOT;
-PERL_MB_OPT="--install_base \"/home/karim/perl5\""; export PERL_MB_OPT;
-PERL_MM_OPT="INSTALL_BASE=/home/karim/perl5"; export PERL_MM_OPT;
+PATH=$PATH:/home/karim/.local/bin
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+#zstyle ':autocomplete:*' fzf-completion yes
+
+source $HOME/.fzf_functions.zsh
+source $HOME/.fzf-z_config.zsh
+
+setopt no_nomatch
+
+my-expand() BUFFER=${(e)BUFFER} CURSOR=$#BUFFER
+zle -N my-expand
+
+autoload -U up-line-or-beginning-search
+autoload -U down-line-or-beginning-search
+zle -N up-line-or-beginning-search
+zle -N down-line-or-beginning-search
+
+function zvm_after_init() {
+  [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+	bindkey '^ ' autosuggest-accept
+	bindkey '^[ ' my-expand
+	bindkey "^[[A" up-line-or-beginning-search # Up
+	bindkey "^[[B" down-line-or-beginning-search # Down
+    enable-fzf-tab
+}
