@@ -119,9 +119,10 @@ bgnotify_threshold=3
 # autosuggest bindings
 unsetopt share_history
 
-PATH=$PATH:/home/karim/work/qflow/src
-PATH=$PATH:/home/karim/work/OpenDP/build
-PATH=$PATH:/home/karim/.local/bin
+export PATH=$PATH:/home/karim/.local/bin
+export PATH=$PATH:/usr/local/go/bin
+export EDITOR='nvim'
+export VISUAL='nvim'
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
@@ -149,3 +150,22 @@ function zvm_after_init() {
 	bindkey "^[[B" down-line-or-beginning-search # Down
     enable-fzf-tab
 }
+
+source $HOME/.zsh_func
+source $HOME/.oh-my-zsh/custom/plugins/zsh-histdb/sqlite-history.zsh
+autoload -Uz add-zsh-hook
+export BAT_THEME=gruvbox-dark
+
+export PATH="/home/karim/repos/git-fuzzy/bin:$PATH"
+export PATH="$HOME/.local/share/nvim/lsp_servers/verible/verible/bin:$PATH"
+export PATH="$HOME/.emacs.d/bin:$PATH"
+export ATUIN_NOBIND="true"
+eval "$(atuin init zsh)"
+
+# depends on terminal mode
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+eval $(thefuck --alias)

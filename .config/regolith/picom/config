@@ -34,7 +34,7 @@ glx-copy-from-front = false;
 # GLX backend: Avoid rebinding pixmap on window damage.
 # Probably could improve performance on rapid window content changes, but is known to break things on some drivers (LLVMpipe).
 # Recommended if it works.
-# glx-no-rebind-pixmap = true;
+glx-no-rebind-pixmap = true;
 
 # GLX backend: GLX buffer swap method we assume.
 # Could be undefined (0), copy (1), exchange (2), 3-6, or buffer-age (-1).
@@ -46,8 +46,8 @@ glx-copy-from-front = false;
 # Useless with --glx-use-copysubbuffermesa.
 # Partially breaks --resize-damage.
 # Defaults to undefined.
-#glx-swap-method = "undefined";
-
+glx-swap-method = "copy";
+use-damage = true
 #################################
 #
 # Shadows
@@ -57,18 +57,18 @@ glx-copy-from-front = false;
 # Enabled client-side shadows on windows.
 shadow = true;
 # The blur radius for shadows. (default 12)
-shadow-radius = 12;
+shadow-radius = 10;
 # The left offset for shadows. (default -15)
-shadow-offset-x = -12;
+shadow-offset-x = -10;
 ## The top offset for shadows. (default -15)
-shadow-offset-y = -12;
+shadow-offset-y = -10;
 ## The translucency for shadows. (default .75)
 shadow-opacity = 1;
 
 # Set if you want different colour shadows
-# shadow-red = 0.5;
-# shadow-green = 0.5;
-# shadow-blue = 0.5;
+# shadow-red = 0.0;
+# shadow-green = 0.0;
+# shadow-blue = 0.0;
 
 # The shadow exclude options are helpful if you have shadows enabled. Due to the way compton draws its shadows, certain applications will have visual glitches
 # (most applications are fine, only apps that do weird things with xshapes or argb are affected).
@@ -106,8 +106,8 @@ shadow-exclude = [
 #
 #################################
 
-inactive-opacity = 0.83;
-active-opacity = 0.93;
+inactive-opacity = 0.89;
+active-opacity = 0.96;
 frame-opacity = 1.0;
 inactive-opacity-override = false;
 
@@ -118,11 +118,13 @@ opacity-rule= [
     "80:class_g = 'URxvt'",
     "100:class_g = 'polybar'",
     "100:class_g = 'Polybar'",
-    "100:class_g = 'Code'",
-    "100:class_g = 'code'",
     "100:class_g = 'Firefox'",
     "100:class_g = 'firefox'",
     "100:class_g = 'dota2'",
+    "100:class_g = 'google-chrome'",
+    "100:class_g = 'zoom'",
+    "100:class_g = 'Zoom'",
+    "100:class_g = 'Google-chrome'",
     "100:class_g = 'Dota 2'",
     "100:class_g = 'Dota 2 (steam)'",
     "99:class_g ?= 'sublime_text' && focused",
@@ -132,7 +134,7 @@ opacity-rule= [
 ];
 
 # Dim inactive windows. (0.0 - 1.0)
-# inactive-dim = 0.1;
+inactive-dim = 0.03;
 
 # Do not let dimness adjust based on window opacity.
 # inactive-dim-fixed = true;
@@ -175,11 +177,11 @@ opacity-rule= [
 #################################
 
 # Fade windows during opacity changes.
-fading = true;
+fading = false;
 # The time between steps in a fade in milliseconds. (default 10).
-fade-delta = 1;
+fade-delta = 2;
 # Opacity change between steps while fading in. (default 0.028).
-fade-in-step = 0.03;
+fade-in-step = 0.028;
 # Opacity change between steps while fading out. (default 0.03).
 fade-out-step = 0.03;
 # Fade windows in/out when opening/closing
@@ -211,23 +213,23 @@ fade-exclude = [ ];
 
 # Specify refresh rate of the screen.
 # If not specified or 0, compton will try detecting this with X RandR extension.
-refresh-rate = 165;
+refresh-rate = 0;
 
 # Vertical synchronization: match the refresh rate of the monitor
 vsync = true;
 
 # Enable DBE painting mode, intended to use with VSync to (hopefully) eliminate tearing.
 # Reported to have no effect, though.
-dbe = false;
+dbe = true;
 
 # Limit compton to repaint at most once every 1 / refresh_rate second to boost performance.
 # This should not be used with --vsync drm/opengl/opengl-oml as they essentially does --sw-opti's job already,
 # unless you wish to specify a lower refresh rate than the actual value.
-#sw-opti = true;
+sw-opti = true;
 
 # Unredirect all windows if a full-screen opaque window is detected, to maximize performance for full-screen windows, like games.
 # Known to cause flickering when redirecting/unredirecting windows.
-unredir-if-possible = false;
+unredir-if-possible = true;
 
 # Specify a list of conditions of windows that should always be considered focused.
 focus-exclude = [ ];
@@ -236,7 +238,7 @@ focus-exclude = [ ];
 #detect-transient = true;
 # Use WM_CLIENT_LEADER to group windows, and consider windows in the same group focused at the same time.
 # WM_TRANSIENT_FOR has higher priority if --detect-transient is enabled, too.
-#detect-client-leader = true;
+detect-client-leader = true;
 
 #################################
 #
@@ -275,7 +277,7 @@ xrender-sync-fence = true;
 #
 #
 
-corner-radius = 20;
+corner-radius = 15;
 round-borders = 0;
 rounded-corners-exclude = [
     "class_g = 'dota2'",
@@ -289,8 +291,8 @@ rounded-corners-exclude = [
 
 
 blur: {
-    method = "dual_kawase";
-    strength = 13;
+    method = "kawase";
+    strength = 11;
     background = false;
     background-frame = false;
     background-fixed = false;

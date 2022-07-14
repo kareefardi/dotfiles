@@ -91,27 +91,28 @@ set_from_resource $ws10_key i3-wm.workspace.10.key 0
 
 ## Launch // Terminal // <> Enter ##
 set_from_resource $i3-wm.binding.terminal i3-wm.binding.terminal Return
-bindsym $mod+$i3-wm.binding.terminal exec /usr/bin/x-terminal-emulator
+bindsym $mod+$i3-wm.binding.terminal exec alacritty
+bindsym $mod+Shift+Return exec gnome-terminal --class=floating_window
 
 ## Launch // Browser // <><Shift> Enter ##
-set_from_resource $i3-wm.binding.browser i3-wm.binding.browser Shift+Return
-bindsym $mod+$i3-wm.binding.browser exec gtk-launch $(xdg-settings get default-web-browser)
+# set_from_resource $i3-wm.binding.browser i3-wm.binding.browser Shift+Return
+# bindsym $mod+$i3-wm.binding.browser exec gtk-launch $(xdg-settings get default-web-browser)
 
-set_from_resource $rofiTheme rofi.theme /etc/regolith/styles/lascaille/rofi.rasi
+set_from_resource $rofiTheme rofi.theme /etc/regolith/styles/gruvbox/rofi.rasi
 
 ## Launch // Application // <> Space ##
 set_from_resource $i3-wm.binding.launcher.app i3-wm.binding.launcher.app d
-set_from_resource $i3-wm.program.launcher.app i3-wm.program.launcher.app rofi -show drun -theme $rofiTheme
+set_from_resource $i3-wm.program.launcher.app i3-wm.program.launcher.app rofi -show drun -theme /etc/regolith/styles/gruvbox/rofi.rasi
 bindsym $mod+$i3-wm.binding.launcher.app exec $i3-wm.program.launcher.app
 
 ## Launch // Command // <><Shift> Space ##
 set_from_resource $i3-wm.binding.launcher.cmd i3-wm.binding.launcher.cmd Shift+d
-set_from_resource $i3-wm.program.launcher.cmd i3-wm.program.launcher.cmd rofi -show window -theme $rofiTheme
+set_from_resource $i3-wm.program.launcher.cmd i3-wm.program.launcher.cmd rofi -show window -theme /etc/regolith/styles/gruvbox/rofi.rasi
 bindsym $mod+$i3-wm.binding.launcher.cmd exec $i3-wm.program.launcher.cmd
 
 ## Navigate // Window by Name // <><Ctrl> Space ##
 set_from_resource $i3-wm.binding.launcher.window i3-wm.binding.launcher.window Shift+space
-set_from_resource $i3-wm.program.launcher.window i3-wm.program.launcher.window rofi -show run -theme $rofiTheme
+set_from_resource $i3-wm.program.launcher.window i3-wm.program.launcher.window rofi -show run -theme /etc/regolith/styles/gruvbox/rofi.rasi
 bindsym $mod+$i3-wm.binding.launcher.window exec $i3-wm.program.launcher.window
 
 ## Launch // This Dialog // <><Shift> ? ##
@@ -468,6 +469,8 @@ for_window [class="rofi*"] floating enable
 for_window [class="Rofi*"] floating enable
 for_window [title="Marker Database Browser"] floating enable
 for_window [title="Marker Database Browser"] resize set 640 480
+for_window [title="Netlist Database Browser"] floating enable
+for_window [title="Netlist Database Browser"] resize set 1228 480
 
 set_from_resource $i3-wm.workspace.auto_back_and_forth i3-wm.workspace.auto_back_and_forth yes
 workspace_auto_back_and_forth $i3-wm.workspace.auto_back_and_forth
@@ -536,9 +539,10 @@ set_from_resource $i3-wm.gaps.inner.size i3-wm.gaps.inner.size 40
 set_from_resource $i3-wm.gaps.outer.size i3-wm.gaps.outer.size 40
 #gaps inner $i3-wm.gaps.inner.size
 #gaps outer $i3-wm.gaps.outer.size
-gaps inner 10
-gaps outer 5
-gaps bottom 38
+gaps inner 7
+gaps outer 3
+#gaps bottom 30
+gaps top 27
 
 # Only enable gaps on a workspace when there is at least one container
 #set_from_resource $i3-wm.gaps.smart i3-wm.gaps.smart off
@@ -686,6 +690,7 @@ set_from_resource $i3-wm.program.3 i3-wm.program.3 :
 exec --no-startup-id $i3-wm.program.3
 
 exec_always --no-startup-id $HOME/.config/polybar/manas/launch.sh
+exec --no-startup-id xrandr --dpi 144
 #exec_always --no-startup-id $HOME/.local/bin/alternating_layouts.py
 
 
@@ -697,9 +702,10 @@ for_window [class="^.*"] border pixel 0
 assign [class="(?i).*Vivaldi.*"] $ws2
 assign [class="(?i).*Chromium.*"] $ws2
 assign [class="(?i).*Firefox.*"] $ws2
+assign [class="(?i).*Brave.*"] $ws2
 assign [class="Nightly"] $ws2
 assign [class="Nautilus"] $ws4
 assign [class="(?i).*slack.*"] $ws3
-assign [class="(?i).*zoom.*"] $ws3
+assign [class="(?i).*Zoom.*"] $ws3
 
-bindsym $mod+Shift+c exec python3 $HOME/.local/bin/i3_switch_monitors.py
+bindsym $mod+Shift+c exec python3 /home/karim/.local/bin/i3_switch_monitors.py
