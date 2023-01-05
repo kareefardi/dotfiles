@@ -690,7 +690,7 @@ set_from_resource $i3-wm.program.3 i3-wm.program.3 :
 exec --no-startup-id $i3-wm.program.3
 
 exec_always --no-startup-id $HOME/.config/polybar/manas/launch.sh
-exec --no-startup-id xrandr --dpi 144
+exec --no-startup-id xrandr --dpi 142
 #exec_always --no-startup-id $HOME/.local/bin/alternating_layouts.py
 
 

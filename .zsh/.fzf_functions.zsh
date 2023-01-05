@@ -4,7 +4,7 @@
 
 _gen_fzf_default_opts() {
 
-    local color00='#181818'
+    local color00='#1d2021'
     local color01='#282828'
     local color02='#383838'
     local color03='#585858'
@@ -23,9 +23,10 @@ _gen_fzf_default_opts() {
 
     export FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS\
     --layout=reverse\
-    --border --margin=1 --padding=1\
+    --border --margin=0,1,0 --padding=0\
+    --preview-window right,40%\
     --info=inline\
-    --color=bg+:$color01,bg:$color00,spinner:$color0C,hl:$color0D\
+    --color=bg+:$color01,bg:$color00,border:$color04,spinner:$color0C,hl:$color0D\
     --color=fg:$color04,header:$color0D,info:$color0A,pointer:$color0C\
     --color=marker:$color0C,fg+:$color06,prompt:$color0A,hl+:$color0D" 
 

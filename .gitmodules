@@ -2,3 +2,6 @@
 	path = .zsh/.oh-my-zsh
 	url = https://github.com/kareefardi/oh-my-zsh
 	branch = master
+[submodule "config/ranger/plugins/ranger-fzf-filter"]
+	path = config/ranger/plugins/ranger-fzf-filter
+	url = https://github.com/MuXiu1997/ranger-fzf-filter
