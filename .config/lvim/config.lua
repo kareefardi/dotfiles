@@ -9,15 +9,9 @@ an executable
 -- THESE ARE EXAMPLE CONFIGS FEEL FREE TO CHANGE TO WHATEVER YOU WANT
 
 -- general
-lvim.builtin.project.active = false
 lvim.log.level = "warn"
-lvim.colorscheme = "oxocarbon-lua"
-lvim.format_on_save = true
--- local onedarkpro = require("onedarkpro")
--- onedarkpro.setup({
---   dark_theme = "onedark_dark",
--- })
-
+lvim.format_on_save.enabled = false
+lvim.colorscheme = "gruvbox-flat"
 -- to disable icons and use a minimalist setup, uncomment the following
 -- lvim.use_icons = false
 
@@ -25,18 +19,14 @@ lvim.format_on_save = true
 lvim.leader = "space"
 -- add your own keymapping
 lvim.keys.normal_mode["<C-s>"] = ":w<cr>"
-lvim.transparent_window = false
--- lvim.builtin.lualine.options.theme = "onedarkpro"
+lvim.keys.normal_mode["<S-l>"] = ":BufferLineCycleNext<CR>"
+lvim.keys.normal_mode["<S-h>"] = ":BufferLineCyclePrev<CR>"
+lvim.keys.normal_mode["<leader>r"] = ":RnvimrToggle<CR>"
 -- unmap a default keymapping
--- lvim.keys.normal_mode["<C-Up>"] = false
--- edit a default keymapping
--- lvim.keys.normal_mode["<C-q>"] = ":q<cr>"
-local _, actions = pcall(require, "telescope.actions")
-lvim.builtin.telescope.defaults.mappings = {
-    i = {
-        ["<esc>"] = actions.close
-    }
-}
+-- vim.keymap.del("n", "<C-Up>")
+-- override a default keymapping
+-- lvim.keys.normal_mode["<C-q>"] = ":q<cr>" -- or vim.keymap.set("n", "<C-q>", ":q<cr>" )
+
 -- Change Telescope navigation to use j and k for navigation and n and p for history in both input and normal mode.
 -- we use protected-mode (pcall) just in case the plugin wasn't loaded yet.
 -- local _, actions = pcall(require, "telescope.actions")
@@ -55,6 +45,10 @@ lvim.builtin.telescope.defaults.mappings = {
 --   },
 -- }
 
+-- Change theme settings
+-- lvim.builtin.theme.options.dim_inactive = true
+-- lvim.builtin.theme.options.style = "storm"
+
 -- Use which-key to add extra bindings with the leader-key prefix
 -- lvim.builtin.which_key.mappings["P"] = { "<cmd>Telescope projects<CR>", "Projects" }
 -- lvim.builtin.which_key.mappings["t"] = {
@@ -64,40 +58,54 @@ lvim.builtin.telescope.defaults.mappings = {
 --   d = { "<cmd>Trouble document_diagnostics<cr>", "Diagnostics" },
 --   q = { "<cmd>Trouble quickfix<cr>", "QuickFix" },
 --   l = { "<cmd>Trouble loclist<cr>", "LocationList" },
---   w = { "<cmd>Trouble workspace_diagnostics<cr>", "Wordspace Diagnostics" },
+--   w = { "<cmd>Trouble workspace_diagnostics<cr>", "Workspace Diagnostics" },
 -- }
 
 -- TODO: User Config for predefined plugins
 -- After changing plugin config exit and reopen LunarVim, Run :PackerInstall :PackerCompile
 lvim.builtin.alpha.active = true
 lvim.builtin.alpha.mode = "dashboard"
-lvim.builtin.notify.active = true
 lvim.builtin.terminal.active = true
 lvim.builtin.nvimtree.setup.view.side = "left"
+lvim.builtin.nvimtree.setup.renderer.icons.show.git = false
 
 -- if you don't want all the parsers change this to a table of the ones you want
 lvim.builtin.treesitter.ensure_installed = {
-    "bash",
-    "c",
-    "javascript",
-    "json",
-    "lua",
-    "python",
-    "typescript",
-    "tsx",
-    "css",
-    "rust",
-    "java",
-    "yaml",
+  "bash",
+  "c",
+  "javascript",
+  "json",
+  "lua",
+  "python",
+  "typescript",
+  "tsx",
+  "css",
+  "rust",
+  "java",
+  "yaml",
 }
 
 lvim.builtin.treesitter.ignore_install = { "haskell" }
-lvim.builtin.treesitter.highlight.enabled = true
+lvim.builtin.treesitter.highlight.enable = true
 
 -- generic LSP settings
 
+-- -- make sure server will always be installed even if the server is in skipped_servers list
+-- lvim.lsp.installer.setup.ensure_installed = {
+--     "sumneko_lua",
+--     "jsonls",
+-- }
+-- -- change UI setting of `LspInstallInfo`
+-- -- see <https://github.com/williamboman/nvim-lsp-installer#default-configuration>
+-- lvim.lsp.installer.setup.ui.check_outdated_servers_on_open = false
+-- lvim.lsp.installer.setup.ui.border = "rounded"
+-- lvim.lsp.installer.setup.ui.keymaps = {
+--     uninstall_server = "d",
+--     toggle_server_expand = "o",
+-- }
+
 -- ---@usage disable automatic installation of servers
-lvim.lsp.automatic_servers_installation = false
+-- lvim.lsp.installer.setup.automatic_installation = false
 
 -- ---configure a server manually. !!Requires `:LvimCacheReset` to take effect!!
 -- ---see the full default list `:lua print(vim.inspect(lvim.lsp.automatic_configuration.skipped_servers))`
@@ -106,8 +114,8 @@ lvim.lsp.automatic_servers_installation = false
 -- require("lvim.lsp.manager").setup("pyright", opts)
 
 -- ---remove a server from the skipped list, e.g. eslint, or emmet_ls. !!Requires `:LvimCacheReset` to take effect!!
--- ---`:LvimInfo` lists which server(s) are skiipped for the current filetype
--- vim.tbl_map(function(server)
+-- ---`:LvimInfo` lists which server(s) are skipped for the current filetype
+-- lvim.lsp.automatic_configuration.skipped_servers = vim.tbl_filter(function(server)
 --   return server ~= "emmet_ls"
 -- end, lvim.lsp.automatic_configuration.skipped_servers)
 
@@ -157,36 +165,27 @@ lvim.lsp.automatic_servers_installation = false
 
 -- Additional Plugins
 lvim.plugins = {
-    {
-        'shaunsingh/oxocarbon.nvim',
-        branch = 'fennel'
+    {'junegunn/vim-easy-align'},
+    {'wakatime/vim-wakatime'},
+    {'pwntester/octo.nvim',
+        requires = {
+            'nvim-lua/plenary.nvim',
+            'nvim-telescope/telescope.nvim',
+            'kyazdani42/nvim-web-devicons',
+        },
     },
-    { 'B4mbus/oxocarbon-lua.nvim' },
-    { 'folke/trouble.nvim' },
-    { 'sbdchd/neoformat' },
     {
-        "norcalli/nvim-colorizer.lua",
-        config = function()
-            require("colorizer").setup({ "*" }, {
-                RGB = true, -- #RGB hex codes
-                RRGGBB = true, -- #RRGGBB hex codes
-                RRGGBBAA = true, -- #RRGGBBAA hex codes
-                rgb_fn = true, -- CSS rgb() and rgba() functions
-                hsl_fn = true, -- CSS hsl() and hsla() functions
-                css = true, -- Enable all CSS features: rgb_fn, hsl_fn, names, RGB, RRGGBB
-                css_fn = true, -- Enable all CSS *functions*: rgb_fn, hsl_fn
-            })
-        end,
+      "npxbr/glow.nvim",
+      ft = {"markdown"}
+      -- run = "yay -S glow"
     },
-    { "junegunn/vim-easy-align" },
-    { "aktersnurra/no-clown-fiesta.nvim" },
-    { "sainnhe/gruvbox-material" },
-    { 'rktjmp/lush.nvim' },
-    { "metalelf0/jellybeans-nvim" },
-    { "vinhnx/Ciapre.tmTheme" },
-    { 'shaunsingh/nord.nvim' },
-    { "luisiacc/gruvbox-baby" },
-    { "kareefardi/gruvbox-flat.nvim",
+    { "gu-fan/InstantRst"},
+    {"sainnhe/gruvbox-material"},
+    {"luisiacc/gruvbox-baby"},
+    {"ellisonleao/gruvbox.nvim" },
+    {
+        "folke/trouble.nvim",
+        cmd = "TroubleToggle",
     },
     {
         "kevinhwang91/rnvimr",
@@ -197,64 +196,7 @@ lvim.plugins = {
             vim.g.rnvimr_bw_enable = 1
         end,
     },
-
-    { 'projekt0n/github-nvim-theme' },
-    { 'yashguptaz/calvera-dark.nvim' },
-    { 'marko-cerovac/material.nvim' },
-    { 'RRethy/nvim-base16' },
-    { 'srcery-colors/srcery-vim' },
-    { "EdenEast/nightfox.nvim" },
-    { 'sainnhe/everforest' },
-    { 'sainnhe/sonokai' },
-    { 'folke/tokyonight.nvim' },
-    { 'mhartington/oceanic-next' },
-    { 'rebelot/kanagawa.nvim' },
-    { 'olimorris/onedarkpro.nvim' },
-    { 'navarasu/onedark.nvim' },
-    {
-        "catppuccin/nvim",
-        as = "catppuccin"
-    },
-    {
-        "ggandor/lightspeed.nvim",
-    },
-    {
-        'wfxr/minimap.vim',
-        run = "cargo install --locked code-minimap",
-    },
-    --  {
-    --    "kevinhwang91/nvim-bqf",
-    --    event = { "BufRead", "BufNew" },
-    --    config = function()
-    --      require("bqf").setup({
-    --        auto_enable = true,
-    --        preview = {
-    --          win_height = 12,
-    --          win_vheight = 12,
-    --          delay_syntax = 80,
-    --          border_chars = { "┃", "┃", "━", "━", "┏", "┓", "┗", "┛", "█" },
-    --        },
-    --        func_map = {
-    --          vsplit = "",
-    --          ptogglemode = "z,",
-    --          stoggleup = "",
-    --        },
-    --        filter = {
-    --          fzf = {
-    --            action_for = { ["ctrl-s"] = "split" },
-    --            extra_opts = { "--bind", "ctrl-o:toggle-all", "--prompt", "> " },
-    --          },
-    --        },
-    --      })
-    --    end,
-    --  },
-    {
-        "windwp/nvim-spectre",
-        event = "BufRead",
-        config = function()
-            require("spectre").setup()
-        end,
-    },
+    { "ggandor/lightspeed.nvim" },
     {
         "ethanholz/nvim-lastplace",
         event = "BufRead",
@@ -269,247 +211,113 @@ lvim.plugins = {
         end,
     },
     {
-        "lukas-reineke/indent-blankline.nvim",
-        setup = function()
-            vim.g.indent_blankline_char = "▏"
-        end,
-        config = function()
-            require("indent_blankline").setup {
-                enabled = true,
-                bufname_exclude = { "README.md" },
-                buftype_exclude = { "terminal", "nofile" },
-                filetype_exclude = {
-                    "alpha",
-                    "log",
-                    "gitcommit",
-                    "dapui_scopes",
-                    "dapui_stacks",
-                    "dapui_watches",
-                    "dapui_breakpoints",
-                    "dapui_hover",
-                    "LuaTree",
-                    "dbui",
-                    "UltestSummary",
-                    "UltestOutput",
-                    "vimwiki",
-                    "markdown",
-                    "json",
-                    "txt",
-                    "vista",
-                    "NvimTree",
-                    "git",
-                    "TelescopePrompt",
-                    "undotree",
-                    "flutterToolsOutline",
-                    "org",
-                    "orgagenda",
-                    "help",
-                    "startify",
-                    "dashboard",
-                    "packer",
-                    "neogitstatus",
-                    "NvimTree",
-                    "Outline",
-                    "Trouble",
-                    "lspinfo",
-                    "", -- for all buffers without a file type
-                },
-                show_trailing_blankline_indent = false,
-                show_first_indent_level = false,
-                space_char_blankline = " ",
-                use_treesitter = true,
-                show_foldtext = false,
-                show_current_context = true,
-                show_current_context_start = false,
-                context_patterns = {
-                    "class",
-                    "return",
-                    "function",
-                    "method",
-                    "^if",
-                    "^do",
-                    "^switch",
-                    "^while",
-                    "jsx_element",
-                    "^for",
-                    "^object",
-                    "^table",
-                    "block",
-                    "arguments",
-                    "if_statement",
-                    "else_clause",
-                    "jsx_element",
-                    "jsx_self_closing_element",
-                    "try_statement",
-                    "catch_clause",
-                    "import_statement",
-                    "operation_type",
-                },
-            }
-        end,
-        event = "BufRead",
-    },
-    {
         "hrsh7th/cmp-cmdline"
     },
+    {"kareefardi/gruvbox-flat.nvim"},
+    { 'sbdchd/neoformat' },
 }
 
 -- Autocommands (https://neovim.io/doc/user/autocmd.html)
--- lvim.autocommands.custom_groups = {
---   { "BufWinEnter", "*.lua", "setlocal ts=8 sw=8" },
--- }
+-- vim.api.nvim_create_autocmd("BufEnter", {
+--   pattern = { "*.json", "*.jsonc" },
+--   -- enable wrap mode for json files only
+--   command = "setlocal wrap",
+-- })
+-- vim.api.nvim_create_autocmd("FileType", {
+--   pattern = "zsh",
+--   callback = function()
+--     -- let treesitter use bash highlight for zsh files as well
+--     require("nvim-treesitter.highlight").attach(0, "bash")
+--   end,
+-- })
+--
+lvim.lsp.installer.setup.automatic_installation = false
+-- lvim.builtin.indentlines.active = false
+-- lvim.builtin.illuminate.active = false
+lvim.builtin.illuminate.options.large_file_cutoff = 10000
 
--- show hidden files when running a find command in telescope
+local _, actions = pcall(require, "telescope.actions")
+lvim.builtin.telescope.defaults.mappings = {
+    i = {
+        ["<esc>"] = actions.close
+    }
+}
 lvim.keys.normal_mode["<leader>ss"] = ":Telescope current_buffer_fuzzy_find previewer=false <CR>"
-lvim.keys.normal_mode["<leader>ff"] = ":Telescope find_files <CR>"
-lvim.keys.normal_mode["<leader>fg"] = ":Telescope git_files <CR>"
+lvim.keys.normal_mode["<leader>f"] = ":Telescope find_files <CR>"
+lvim.keys.normal_mode["<leader>gf"] = ":Telescope git_files <CR>"
 lvim.keys.normal_mode["<leader>bq"] = ":BufferLineCloseLeft <CR>:BufferLineCloseRight <CR>"
 lvim.keys.normal_mode["<leader>sw"] = ":execute 'Telescope live_grep default_text=' . expand('<cword>')<CR>"
---vim.cmd([[
---  nnoremap <leader>sw :execute 'Telescope live_grep default_text=' . expand('<cword>')<cr>
---]])
---lvim.keys.normal_mode["<leader>sw"] = ":Telescope live_grep default_text=' . expand('<cword>')<CR>"
--- lvim.builtin.telescope.defaults.layout_config.width = 0.90
--- lvim.builtin.telescope.defaults.layout_config.preview_cutoff = 30
--- lvim.builtin.telescope.defaults.layout_config.preview_height = 0.20
--- lvim.builtin.telescope.defaults.layout_strategy = "vertical"
-
-vim.g.neovide_cursor_animation_length = 0
-vim.g.gruvbox_material_background = 'hard'
-vim.g.neovide_refresh_rate = 165
-vim.g.rnvimr_draw_border = 1
-vim.g.rnvimr_pick_enable = 1
-vim.g.rnvimr_bw_enable = 1
-vim.g.material_style = "darker"
-
-vim.g.gruvbox_italic_variables = true
-vim.g.gruvbox_flat_style = "hard"
-
-
-vim.o.cmdheight = 1
-vim.o.guifont = "FiraCode Nerd Font Mono:h12"
--- vim.o.guifont = "CaskaydiaCove Nerd Font Mono:h13"
 
 vim.cmd([[
   vnoremap <silent> * :<C-U>
-    \let old_reg=getreg('"')<Bar>let old_regtype=getregtype('"')<CR>
-    \gvy/<C-R>=&ic?'\c':'\C'<CR><C-R><C-R>=substitute(
-    \escape(@", '/\.*$^~['), '\_s\+', '\\_s\\+', 'g')<CR><CR>
-    \gVzv:call setreg('"', old_reg, old_regtype)<CR>
+  \let old_reg=getreg('"')<Bar>let old_regtype=getregtype('"')<CR>
+  \gvy/<C-R>=&ic?'\c':'\C'<CR><C-R><C-R>=substitute(
+  \escape(@", '/\.*$^~['), '\_s\+', '\\_s\\+', 'g')<CR><CR>
+  \gVzv:call setreg('"', old_reg, old_regtype)<CR>
   vnoremap <silent> # :<C-U>
-    \let old_reg=getreg('"')<Bar>let old_regtype=getregtype('"')<CR>
-    \gvy?<C-R>=&ic?'\c':'\C'<CR><C-R><C-R>=substitute(
-    \escape(@", '?\.*$^~['), '\_s\+', '\\_s\\+', 'g')<CR><CR>
-    \gVzv:call setreg('"', old_reg, old_regtype)<CR>
+  \let old_reg=getreg('"')<Bar>let old_regtype=getregtype('"')<CR>
+  \gvy?<C-R>=&ic?'\c':'\C'<CR><C-R><C-R>=substitute(
+  \escape(@", '?\.*$^~['), '\_s\+', '\\_s\\+', 'g')<CR><CR>
+  \gVzv:call setreg('"', old_reg, old_regtype)<CR>
   " Start interactive EasyAlign in visual mode (e.g. vipga)
   xmap ga <Plug>(EasyAlign)
 
   " Start interactive EasyAlign for a motion/text object (e.g. gaip)
   nmap ga <Plug>(EasyAlign)
 ]])
+
+lvim.builtin.cmp.cmdline.enable = true
+lvim.builtin.cmp.cmdline.options = {
+    {
+        type = ":",
+        sources = {
+            { name = "cmdline" },
+            { name = "path" }
+        },
+    },
+    {
+        type = { "/", "?" },
+        sources = {
+            { name = "buffer" },
+        },
+    },
+}
+vim.g.neovide_cursor_animation_length = 0
+vim.g.neovide_refresh_rate = 165
+vim.o.guifont = "Liga SFMono Nerd Font:h11.7:#e-subpixelantialias:#h-none"
+
 vim.cmd([[
-  if !exists('g:easy_align_delimiters')
-    let g:easy_align_delimiters = {}
-  endif
-  let g:easy_align_delimiters['('] = { 'pattern': '(', 'right_margin': 0 }
-]])
-vim.cmd("let g:minimap_width = 10")
-vim.cmd("let g:minimap_auto_start = 0")
-vim.cmd("let g:minimap_auto_start_win_enter = 1")
-vim.cmd([[
-autocmd FocusGained,BufEnter,CursorHold,CursorHoldI *
-        \ if mode() !~ '\v(c|r.?|!|t)' && getcmdwintype() == '' | checktime | endif
-autocmd FileChangedShellPost *
-  \ echohl WarningMsg | echo "File changed on disk. Buffer reloaded." | echohl Noneautocmd FileChangedShellPost *
+    set tabstop=4
+    set shiftwidth=4
+    set expandtab
+    let g:rnvimr_layout = {
+                \ 'relative': 'editor',
+                \ 'width': float2nr(round(0.85 * &columns)),
+                \ 'height': float2nr(round(0.75 * &lines)),
+                \ 'col': float2nr(round(0.08 * &columns)),
+                \ 'row': float2nr(round(0.10 * &lines)),
+                \ 'style': 'minimal'
+                \ }
 ]])
 
-local components = require("lvim.core.lualine.components")
--- lvim.builtin.lualine.options.globalstatus = true
--- lvim.builtin.lualine.sections.lualine_c = {
--- { 'filename', file_status = false, full_path = true }
--- }
+vim.g.neoformat_enabled_python = {'black'}
+vim.g.neoformat_basic_format_retab = 1
 
-local cmp = require 'cmp'
-cmp.setup.cmdline('/', {
-    mapping = cmp.mapping.preset.cmdline(),
-    sources = {
-        { name = 'buffer' }
-    }
-})
--- `:` cmdline setup.
-cmp.setup.cmdline(':', {
-    mapping = cmp.mapping.preset.cmdline(),
-    sources = cmp.config.sources({
-        { name = 'path' }
-    }, {
-        { name = 'cmdline' }
-    })
-})
-
-vim.g.nord_disable_background = false
-vim.g.gruvbox_baby_highlights = { Normal = { bg = "#1d2021" } }
+vim.g.gruvbox_italic_variables = true
+vim.g.gruvbox_material_background = "hard"
+vim.g.gruvbox_flat_style = "hard"
 vim.g.gruvbox_baby_telescope_theme = 1
--- Lua
--- lvim.builtin.nvimtree.show_icons.git = 0
-
--- local _, util = pcall(require, "gruvbox.util")
--- local _, colors = pcall(require, "gruvbox.colors")
--- local _, config = pcall(require, "gruvbox.config")
--- local c = colors.setup(config)
--- -- TelescopeBorder = { fg = util.darken(c.fg, 0.75) },
--- --      TelescopePromptBorder = { fg = c.fg_light },
--- --      TelescopeResultsBorder = { fg = util.darken(c.fg, 0.75) },
--- --      TelescopeSelectionCaret = { fg = c.purple },
--- --      TelescopeSelection = { fg = c.purple, bg = c.bg_highlight },
--- --      TelescopeMatching = { fg = c.blue },
--- vim.cmd("highlight NvimTreeVertSplit guibg=" .. c.bg_sidebar .. " guifg=" .. c.bg_sidebar)
--- local function set_bg(group, bg)
---   vim.cmd("hi " .. group .. " guibg=" .. bg)
--- end
---
--- local function set_fg_bg(group, fg, bg)
---   vim.cmd("hi " .. group .. " guifg=" .. fg .. " guibg=" .. bg)
--- end
---
--- vim.cmd("highlight TelescopeBorder " .. "guifg=" .. c.bg .. " guibg=" .. c.bg)
--- set_fg_bg("TelescopeBorder", c.bg, c.bg)
--- set_fg_bg("TelescopePromptBorder", c.bg, c.bg)
--- set_fg_bg("TelescopePromptNormal", c.fg, c.bg2)
--- set_fg_bg("TelescopePromptPrefix", c.red, c.bg)
--- set_fg_bg("TelescopePreviewTitle", c.bg, c.green)
--- set_fg_bg("TelescopePromptTitle", c.bg, c.red)
--- set_fg_bg("TelescopeResultsTitle", c.bg, c.bg)
--- set_fg_bg("TelescopeResultsBorder", c.bg, c.bg)
--- set_fg_bg("LvimInfoHeader", c.bg, c.green)
--- set_fg_bg("LvimInfoIdentifier", c.red, c.bg2)
--- set_bg("TelescopeSelection", c.bg2)
--- set_bg("TelescopeNormal", c.bg)
+vim.g.gruvbox_baby_background_color = "dark"
 lvim.builtin.cmp.window.completion.winhighlight = "Normal:NormalFloat,FloatBorder:FloatBorder,CursorLine:Visual,Search:None"
 lvim.builtin.cmp.window.documentation.winhighlight = "Normal:NormalFloat,FloatBorder:FloatBorder,CursorLine:Visual,Search:None"
 lvim.builtin.cmp.window.completion.border = "rounded"
 lvim.builtin.cmp.window.documentation.border = "rounded"
-
-lvim.builtin.treesitter.highlight.disable = function(lang, bufnr) -- Disable in large C++ buffers
-    return lang == "verilog" and vim.api.nvim_buf_line_count(bufnr) > 5000
-end
-vim.api.nvim_create_autocmd("BufEnter", {
-    group = vim.api.nvim_create_augroup("IndentBlanklineBigFile", {}),
-    pattern = "*",
-    callback = function()
-        if vim.api.nvim_buf_line_count(0) > 5000 then
-            require("indent_blankline.commands").disable()
-        end
-    end,
-})
-lvim.builtin.project.active = false
--- lvim.builtin.project.manual_mode = true
 vim.cmd([[
-  set tabstop=4
-  set shiftwidth=4
-  set expandtab
+autocmd FocusGained,BufEnter,CursorHold,CursorHoldI *
+\ if mode() !~ '\v(c|r.?|!|t)' && getcmdwintype() == '' | checktime | endif
+autocmd FileChangedShellPost *
+\ echohl WarningMsg | echo "File changed on disk. Buffer reloaded." | echohl Noneautocmd FileChangedShellPost *
 ]])
 
-lvim.builtin.nvimtree.setup.update_cwd = false
-lvim.builtin.nvimtree.setup.sync_root_with_cwd = false
-lvim.builtin.nvimtree.setup.actions.change_dir.enable = false
-lvim.builtin.nvimtree.setup.update_focused_file.update_root = false
+vim.g.rnvimr_hide_gitignore = 0
+vim.g.rnvimr_shadow_winblend = 70
