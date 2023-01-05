@@ -69,17 +69,19 @@ ZSH_THEME="powerlevel10k/powerlevel10k"
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
-	auto-color-ls
+	#auto-color-ls
 	bgnotify
 	forgit
 	fzf
-	fzf-tab
 	zsh-autosuggestions
-	#zsh-autocomplete
 	zsh-syntax-highlighting
 	zsh-z
 	zsh-expand
 	zsh-vi-mode
+    exa
+    #zsh-autocomplete
+    git-tree-zsh
+	fzf-tab
 )
 
 source $ZSH/oh-my-zsh.sh
@@ -119,23 +121,26 @@ bgnotify_threshold=3
 # autosuggest bindings
 unsetopt share_history
 
-export PATH=$PATH:/home/karim/.local/bin
+export PATH=/home/karim/.local/magic/bin:/home/karim/.local/sta/bin:$PATH:/home/karim/.local/bin
 export PATH=$PATH:/usr/local/go/bin
+export PATH=$PATH:$HOME/Downloads/or-tools_cpp_Ubuntu-20.04-64bit_v9.4.1874/bin
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$HOME/Downloads/or-tools_cpp_Ubuntu-20.04-64bit_v9.4.1874/lib
 export EDITOR='nvim'
 export VISUAL='nvim'
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
-#zstyle ':autocomplete:*' fzf-completion yes
+zstyle ':autocomplete:*' fzf-completion yes
 
 source $HOME/.fzf_functions.zsh
 source $HOME/.fzf-z_config.zsh
+source $HOME/.ranger-function.bash
 
 setopt no_nomatch
 
-my-expand() BUFFER=${(e)BUFFER} CURSOR=$#BUFFER
-zle -N my-expand
+#my-expand() BUFFER=${(e)BUFFER} CURSOR=$#BUFFER
+#zle -N my-expand
 
 autoload -U up-line-or-beginning-search
 autoload -U down-line-or-beginning-search
@@ -151,8 +156,10 @@ function zvm_after_init() {
     enable-fzf-tab
 }
 
+source $HOME/.nnn_config
 source $HOME/.zsh_func
 source $HOME/.oh-my-zsh/custom/plugins/zsh-histdb/sqlite-history.zsh
+source $HOME/.oh-my-zsh/custom/plugins/fuzzy-fs/fuzzy-fs
 autoload -Uz add-zsh-hook
 export BAT_THEME=gruvbox-dark
 
@@ -169,3 +176,36 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 eval $(thefuck --alias)
+source $HOME/.config/lf/lfcd.sh
+# disable sort when completing `git checkout`
+zstyle ':completion:*:git-checkout:*' sort false
+# set descriptions format to enable group support
+zstyle ':completion:*:descriptions' format '[%d]'
+zstyle ':fzf-tab:*' fzf-command ftb-tmux-popup
+# set list-colors to enable filename colorizing
+zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
+source ~/.fzf-tab-previews.zsh
+# switch group using `,` and `.`
+zstyle ':fzf-tab:*' switch-group ',' '.'
+	[[ -s /home/karim/.autojump/etc/profile.d/autojump.sh ]] && source /home/karim/.autojump/etc/profile.d/autojump.sh
+
+	autoload -U compinit && compinit -u
+
+source /home/karim/.config/broot/launcher/bash/br
+zmodload zsh/zprof
+source $HOME/.tmp_commands.bash
+bindkey '\e[1;5D' backward-word
+bindkey '\e[1;5C' forward-word
+zstyle ':fzf-tab:*' fzf-bindings 'space:accept'
+#source $HOME/.oh-my-zsh/custom/plugins/zsh-autocomplete/zsh-autocomplete.plugin.zsh
+#my-fzf-tab() {
+#  functions[compadd]=$functions[-ftb-compadd]
+#  zle fzf-tab-complete
+#}
+#zle -N my-fzf-tab
+#
+#add-zsh-hook precmd bind-tab
+#bind-tab() {
+#  bindkey '\t' fzf-tab-complete
+#  bindkey $terminfo[kcbt] fzf-tab-complete
+#}
